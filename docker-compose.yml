@@ -1,0 +1,49 @@
+---
+secrets:
+  smtp_password:
+    file: ./.secrets/smtp_password
+services:
+  borgmatic:
+    cap_add:
+      - SYS_ADMIN
+    container_name: borgmatic
+    depends_on:
+      - rclone
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    environment:
+      - TZ
+      - RUN_ON_STARTUP
+      - ADMIN_EMAIL
+      - SMTP_HOST
+      - SMTP_USER
+      - SMTP_PASSWORD=/run/secrets/smtp_password
+    image: ghcr.io/borgmatic-collective/borgmatic
+    restart: unless-stopped
+    secrets:
+      - smtp_password
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /root/.ssh:/root/.ssh:ro
+      - ./data/repository:/mnt/repository:shared
+      - ./config/borgmatic/borgmatic.d:/etc/borgmatic.d:ro
+      - ./data/borgmatic/cache:/root/.cache/borg
+      - ./data/borgmatic/borg:/root/.config/borg
+  rclone:
+    cap_add:
+      - SYS_ADMIN
+    command: 'mount repository: /data/repository --allow-non-empty --vfs-cache-mode full --cache-dir=/tmp/cache'
+    container_name: rclone
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+    image: rclone/rclone:latest
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - ./config/rclone:/config/rclone
+      - ./data/repository:/data/repository:shared
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - /etc/fuse.conf:/etc/fuse.conf:ro
