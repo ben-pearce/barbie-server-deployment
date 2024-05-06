@@ -26,10 +26,10 @@ services:
       - apparmor:unconfined
     volumes:
       - /root/.ssh:/root/.ssh:ro
-      - ./data/repository:/mnt/repository:shared
-      - ./config/borgmatic/borgmatic.d:/etc/borgmatic.d:ro
-      - ./data/borgmatic/cache:/root/.cache/borg
-      - ./data/borgmatic/borg:/root/.config/borg
+      - ${DATA_DIR}/repository:/mnt/repository:shared
+      - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d:ro
+      - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
+      - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
   rclone:
     cap_add:
       - SYS_ADMIN
@@ -42,8 +42,8 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
-      - ./config/rclone:/config/rclone
-      - ./data/repository:/data/repository:shared
+      - ${CONFIG_DIR}/rclone:/config/rclone
+      - ${DATA_DIR}/repository:/data/repository:shared
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
