@@ -18,6 +18,9 @@ services:
       - SMTP_USER
       - SMTP_PASSWORD=/run/secrets/smtp_password
     image: ghcr.io/borgmatic-collective/borgmatic:1.9.12
+    labels:
+      readme.description: Simple, configuration-driven backup software.
+      readme.links.github: https://github.com/borgmatic-collective/borgmatic
     restart: unless-stopped
     secrets:
       - smtp_password
@@ -29,9 +32,6 @@ services:
       - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d:ro
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
-    labels:
-      readme.description: Simple, configuration-driven backup software.
-      readme.links.github: https://github.com/borgmatic-collective/borgmatic
   rclone:
     cap_add:
       - SYS_ADMIN
@@ -42,6 +42,11 @@ services:
     devices:
       - /dev/fuse:/dev/fuse:rwm
     image: rclone/rclone:1.69.1
+    labels:
+      readme.description: >-
+        Command-line program to sync files and directories to and from different
+        cloud storage providers.
+      readme.links.web: https://rclone.org/
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
@@ -51,6 +56,3 @@ services:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
-    labels:
-      readme.description: Command-line program to sync files and directories to and from different cloud storage providers.
-      readme.links.web: https://rclone.org/
