@@ -18,7 +18,7 @@ services:
       - SMTP_HOST
       - SMTP_USER
       - SMTP_PASSWORD=/run/secrets/smtp_password
-    image: ghcr.io/borgmatic-collective/borgmatic
+    image: ghcr.io/borgmatic-collective/borgmatic:1.9.12
     restart: unless-stopped
     secrets:
       - smtp_password
@@ -37,7 +37,7 @@ services:
     container_name: rclone
     devices:
       - /dev/fuse:/dev/fuse:rwm
-    image: rclone/rclone:latest
+    image: rclone/rclone:1.69.1
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
