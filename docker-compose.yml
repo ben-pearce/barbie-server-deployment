@@ -1,4 +1,3 @@
----
 secrets:
   smtp_password:
     file: ./.secrets/smtp_password
@@ -33,7 +32,9 @@ services:
   rclone:
     cap_add:
       - SYS_ADMIN
-    command: 'mount repository: /data/repository --allow-non-empty --vfs-cache-max-size 10G --vfs-cache-mode full --cache-dir=/tmp/cache'
+    command: >-
+      mount repository: /data/repository --allow-non-empty --vfs-cache-max-size
+      10G --vfs-cache-mode full --cache-dir=/tmp/cache
     container_name: rclone
     devices:
       - /dev/fuse:/dev/fuse:rwm
