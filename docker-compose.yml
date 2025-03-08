@@ -16,7 +16,7 @@ services:
       - ADMIN_EMAIL
       - SMTP_HOST
       - SMTP_USER
-      - SMTP_PASSWORD=/run/secrets/smtp_password
+      - FILE__SMTP_PASSWORD=/run/secrets/smtp_password
     image: ghcr.io/borgmatic-collective/borgmatic:1.9.12
     labels:
       readme.description: Simple, configuration-driven backup software.
