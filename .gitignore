@@ -1,7 +1,4 @@
 .secrets
 .env
 data
-
-config/rclone
-config/borgmatic/*/*.*
-!config/borgmatic/borgmatic.d/crontab.txt
+config
