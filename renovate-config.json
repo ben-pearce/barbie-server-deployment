@@ -3,5 +3,8 @@
   "extends": [
     "config:recommended"
   ],
+  "github-actions": {
+    "enabled": false
+  },
   "repositories": ["ben-pearce/barbie-server-deployment"]
 }
