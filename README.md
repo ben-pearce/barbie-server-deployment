@@ -9,7 +9,9 @@ This repository holds my docker compose files and configuration files for servic
 | [borgmatic](./docker-compose.yml#L8)  | Simple, configuration-driven backup software. |  | [GitHub](https://github.com/borgmatic-collective/borgmatic) |
 | [rclone](./docker-compose.yml#L41)  | Command-line program to sync files and directories to and from different cloud storage providers. |  | [Website](https://rclone.org/) |
 
+<sup>1</sup>Assumes mass storage available, mounted at MEDIA_DIR on the host.
 
+<sup>2</sup>All traffic is routed via tunnel VPN client container.
 
 ## Prerequisites
 
