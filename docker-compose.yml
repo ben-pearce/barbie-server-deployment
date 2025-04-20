@@ -17,7 +17,7 @@ services:
       - SMTP_HOST
       - SMTP_USER
       - FILE__SMTP_PASSWORD=/run/secrets/smtp_password
-    image: ghcr.io/borgmatic-collective/borgmatic:1.9.14
+    image: ghcr.io/borgmatic-collective/borgmatic:1.9.14@sha256:70bca87df9d84d45f50b4c56f55bb0f20e21341faacd0a07f89e43e3da50cd9e
     labels:
       readme.description: Simple, configuration-driven backup software.
       readme.links.github: https://github.com/borgmatic-collective/borgmatic
@@ -41,7 +41,7 @@ services:
     container_name: rclone
     devices:
       - /dev/fuse:/dev/fuse:rwm
-    image: rclone/rclone:1.69.1
+    image: rclone/rclone:1.69.1@sha256:600f51856285df1ae5d91c8bb2682cbbe31bf109ebeeef9ecead6ca8c0ff6138
     labels:
       readme.description: >-
         Command-line program to sync files and directories to and from different
