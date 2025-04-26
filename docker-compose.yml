@@ -17,7 +17,7 @@ services:
       - SMTP_HOST
       - SMTP_USER
       - FILE__SMTP_PASSWORD=/run/secrets/smtp_password
-    image: ghcr.io/borgmatic-collective/borgmatic:1.9.14@sha256:70bca87df9d84d45f50b4c56f55bb0f20e21341faacd0a07f89e43e3da50cd9e
+    image: ghcr.io/borgmatic-collective/borgmatic:2.0.4@sha256:571e8f4963cbcd4dde291baee3737731fb3dfa36f694709fd1d8f8e076b6b357
     labels:
       readme.description: Simple, configuration-driven backup software.
       readme.links.github: https://github.com/borgmatic-collective/borgmatic
