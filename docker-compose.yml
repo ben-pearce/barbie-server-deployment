@@ -13,6 +13,7 @@ services:
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
     secrets:
       - smtp_password
+      - borg_passphrase
     environment:
       - TZ
       - RUN_ON_STARTUP
@@ -90,3 +91,5 @@ secrets:
     file: ./.secrets/smtp_password
   zabbix_agent_psk:
     file: ./.secrets/zabbix_agent_psk
+  borg_passphrase:
+    file: ./.secrets/borg_passphrase
