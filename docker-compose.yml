@@ -1,7 +1,7 @@
 name: barbie-server-deployment
 services:
   borgmatic:
-    image: ghcr.io/borgmatic-collective/borgmatic:2.0.5@sha256:4fb648fa6291e1698101dbed11bbd86a4b088a369602f5ec878e99c971cc72eb
+    image: ghcr.io/borgmatic-collective/borgmatic:2.0.6@sha256:cdd517a40a7eed8f34411c83e773da45601f936197132147d6a9fcfbe92a8aba
     container_name: borgmatic
     depends_on:
       - rclone
