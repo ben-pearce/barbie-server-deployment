@@ -8,7 +8,8 @@ services:
     volumes:
       - /root/.ssh:/root/.ssh:ro
       - ${DATA_DIR}/repository:/mnt/repository:shared
-      - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d:ro
+      - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d
+      - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
     secrets:
