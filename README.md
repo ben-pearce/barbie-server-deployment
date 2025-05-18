@@ -7,9 +7,9 @@ This repository holds my docker compose files and configuration files for servic
 | **Name** | **Description** | **Ports** | **Links** |
 |---|---|---|---|
 | [borgmatic](./docker-compose.yml#L5)  | Simple, configuration-driven backup software. |  | [GitHub](https://github.com/borgmatic-collective/borgmatic) |
-| [portainer-agent](./docker-compose.yml#L36)  | Portainer edge agent. |  | [GitHub](https://github.com/portainer/agent) |
-| [rclone](./docker-compose.yml#L52)  | Command-line program to sync files and directories to and from different cloud storage providers. |  | [Website](https://rclone.org/) |
-| [zabbix-agent](./docker-compose.yml#L76)  | Zabbix agent for monitoring. |  | [Docker Hub](https://hub.docker.com/r/zabbix/zabbix-agent) |
+| [portainer-agent](./docker-compose.yml#L37)  | Portainer edge agent. |  | [GitHub](https://github.com/portainer/agent) |
+| [rclone](./docker-compose.yml#L53)  | Command-line program to sync files and directories to and from different cloud storage providers. |  | [Website](https://rclone.org/) |
+| [zabbix-agent](./docker-compose.yml#L77)  | Zabbix agent for monitoring. |  | [Docker Hub](https://hub.docker.com/r/zabbix/zabbix-agent) |
 
 
 
