@@ -6,10 +6,10 @@ This repository holds my docker compose files and configuration files for servic
 
 | **Name** | **Description** | **Ports** | **Links** |
 |---|---|---|---|
-| [borgmatic](./docker-compose.yml#L5)  | Simple, configuration-driven backup software. |  | [GitHub](https://github.com/borgmatic-collective/borgmatic) |
-| [portainer-agent](./docker-compose.yml#L37)  | Portainer edge agent. |  | [GitHub](https://github.com/portainer/agent) |
-| [rclone](./docker-compose.yml#L53)  | Command-line program to sync files and directories to and from different cloud storage providers. |  | [Website](https://rclone.org/) |
-| [zabbix-agent](./docker-compose.yml#L77)  | Zabbix agent for monitoring. |  | [Docker Hub](https://hub.docker.com/r/zabbix/zabbix-agent) |
+| [portainer-agent](./docker-compose.monitoring.yml#L5)  | Portainer edge agent. |  | [GitHub](https://github.com/portainer/agent) |
+| [zabbix-agent](./docker-compose.monitoring.yml#L21)  | Zabbix agent for monitoring. |  | [Docker Hub](https://hub.docker.com/r/zabbix/zabbix-agent) |
+| [borgmatic](./docker-compose.yml#L7)  | Simple, configuration-driven backup software. |  | [GitHub](https://github.com/borgmatic-collective/borgmatic) |
+| [rclone](./docker-compose.yml#L39)  | Command-line program to sync files and directories to and from different cloud storage providers. |  | [Website](https://rclone.org/) |
 
 
 
@@ -30,6 +30,7 @@ The `.env` file stores environment variables to make starting the containers eas
 | `CONFIG_DIR` | Location of config storage on host. | `.config` |
 | `DATA_DIR` | Location of data storage on host. | `.data` |
 | `ADMIN_EMAIL` | Administrative email address. | `somebody@email.com` |
+| `ZBX_HOSTNAME` | Zabbix server hostname. | `zabbix-server` |
 | `ZBX_SERVER_HOST` | Zabbix monitoring server host. | `zabbix.example.com` |
 | `ZBX_REFRESHACTIVECHECKS` | Zabbix active check interval. | `60` |
 
