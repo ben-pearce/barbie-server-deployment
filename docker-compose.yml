@@ -35,7 +35,7 @@ services:
     security_opt:
       - apparmor:unconfined
   rclone:
-    image: rclone/rclone:1.69.2@sha256:df9f8f0115e2816b18099c28a629e6914c84915b55aeddd2db58df8cf6b76d34
+    image: rclone/rclone:1.69.3@sha256:1f497a86a6466395e62a5886613a14b7b18809543566ef9fa35fa1371a7ecc0f
     container_name: rclone
     volumes:
       - ${CONFIG_DIR}/rclone:/config/rclone
