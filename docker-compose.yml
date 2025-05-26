@@ -11,9 +11,11 @@ services:
       - /root/.ssh:/root/.ssh:ro
       - ${DATA_DIR}/repository:/mnt/repository:shared
       - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d
-      - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
+      - cloud:/etc/borgmatic.d/barbie/cloud
+      - workspaces:/etc/borgmatic.d/barbie/workspaces
+      - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
     secrets:
       - smtp_password
       - borg_passphrase
@@ -58,6 +60,17 @@ services:
       - /dev/fuse:/dev/fuse:rwm
     security_opt:
       - apparmor:unconfined
+volumes:
+  cloud:
+    driver_opts:
+      type: 'nfs'
+      o: 'addr=${NFS_HOST},nolock,soft,nfsvers=4'
+      device: ':/mnt/pool/cloud'
+  workspaces:
+    driver_opts:
+      type: 'nfs'
+      o: 'addr=${NFS_HOST},nolock,soft,nfsvers=4'
+      device: ':/mnt/pool/workspaces'
 secrets:
   smtp_password:
     file: ./.secrets/smtp_password
