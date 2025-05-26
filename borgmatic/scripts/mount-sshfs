@@ -1,0 +1,6 @@
+#!/bin/bash
+sshfs \
+    borg@"$1":/ \
+    /etc/borgmatic.d/"$1" \
+    -o StrictHostKeyChecking=no \
+    -o sftp_server="/usr/bin/sudo /usr/lib/sftp-server"

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# shellcheck source=../umount-sshfs
+. "$(realpath "$(dirname "$0")/..")"/umount-sshfs etch

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+find workspaces -type f -name ".gitignore" | while read -r gitignore_file; do
+    base_dir=$(dirname "$gitignore_file")
+    grep -vE '^\s*#|^\s*$' "$gitignore_file" | while read -r line; do
+        echo "$base_dir/$line" >> /tmp/barbie-excludes
+    done
+done

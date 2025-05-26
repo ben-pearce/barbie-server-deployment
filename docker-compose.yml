@@ -16,6 +16,7 @@ services:
       - cloud:/etc/borgmatic.d/barbie/cloud
       - workspaces:/etc/borgmatic.d/barbie/workspaces
       - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
+      - ./borgmatic/scripts:/etc/borgmatic.d/scripts:ro
     secrets:
       - smtp_password
       - borg_passphrase
