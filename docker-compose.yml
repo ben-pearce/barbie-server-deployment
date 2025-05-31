@@ -66,12 +66,12 @@ volumes:
     driver_opts:
       type: 'nfs'
       o: 'addr=${NFS_HOST},nolock,soft,nfsvers=4'
-      device: ':/mnt/pool/cloud'
+      device: ':/mnt/turbo/cloud'
   workspaces:
     driver_opts:
       type: 'nfs'
       o: 'addr=${NFS_HOST},nolock,soft,nfsvers=4'
-      device: ':/mnt/pool/workspaces'
+      device: ':/mnt/turbo/workspaces'
 secrets:
   smtp_password:
     file: ./.secrets/smtp_password
