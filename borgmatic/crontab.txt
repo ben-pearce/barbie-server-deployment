@@ -1,1 +1,1 @@
-0 12,0 * * * PATH=$PATH:/usr/local/bin /usr/local/bin/borgmatic
+0 */6 * * * PATH=$PATH:/usr/local/bin /usr/local/bin/borgmatic
