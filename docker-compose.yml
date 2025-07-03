@@ -47,13 +47,11 @@ services:
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
     command: >-
-      mount repository: /data/repository --allow-non-empty --vfs-cache-max-size
-      10G --vfs-cache-mode full --cache-dir=/tmp/cache
+      mount repository: /data/repository --allow-non-empty --vfs-cache-max-size 10G --vfs-cache-mode full --cache-dir=/tmp/cache
     restart: unless-stopped
     labels:
       readme.description: >-
-        Command-line program to sync files and directories to and from different
-        cloud storage providers.
+        Command-line program to sync files and directories to and from different cloud storage providers.
       readme.links.web: https://rclone.org/
     cap_add:
       - SYS_ADMIN
