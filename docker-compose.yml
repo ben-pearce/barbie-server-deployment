@@ -1,6 +1,6 @@
 name: barbie-server-deployment
 include:
-  - docker-compose.monitoring.yml
+  - stacks/docker-compose.monitoring.yml
 services:
   borgmatic:
     image: ghcr.io/borgmatic-collective/borgmatic:2.0.7@sha256:5b44db485bc56f063dcca0c50af46165a3c9de18814665a95e7cbb2e3c29d83f
