@@ -47,7 +47,13 @@ services:
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
     command: >-
-      mount repository: /data/repository --allow-non-empty --vfs-cache-max-size 10G --vfs-cache-mode full --cache-dir=/tmp/cache
+      mount repository: /data/repository 
+      --allow-non-empty 
+      --vfs-cache-max-size 10G 
+      --vfs-write-back 10s 
+      --vfs-write-wait 30s 
+      --vfs-cache-mode full 
+      --cache-dir=/tmp/cache
     restart: unless-stopped
     labels:
       readme.description: >-
