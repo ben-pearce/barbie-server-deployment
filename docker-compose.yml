@@ -47,7 +47,6 @@ services:
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
       - ./rclone/with-google-vfs-max-size:/with-google-vfs-max-size:ro
-    entrypoint: /with-google-vfs-max-size
     command: >-
       mount repository: /data/repository 
         --allow-non-empty 
@@ -56,6 +55,7 @@ services:
         --vfs-write-wait 30s 
         --vfs-cache-mode full 
         --cache-dir=/tmp/cache
+    entrypoint: /with-google-vfs-max-size
     restart: unless-stopped
     labels:
       readme.description: >-
