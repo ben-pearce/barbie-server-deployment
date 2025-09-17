@@ -1,1 +1,2 @@
-0 */6 * * * PATH=$PATH:/usr/local/bin /usr/local/bin/borgmatic
+0 */6 * * * PATH=$PATH:/usr/local/bin /usr/local/bin/borgmatic -c /etc/borgmatic.d/barbie.yaml -c /etc/borgmatic.d/jessie.yaml -c /etc/borgmatic.d/etch.yaml -c /etc/borgmatic.d/rc.yaml -c /etc/borgmatic.d/sparks.yaml -c /etc/borgmatic.d/zurg.yaml
+0 1 * * */2 PATH=$PATH:/usr/local/bin /usr/local/bin/borgmatic -c /etc/borgmatic.d/woody.yaml
