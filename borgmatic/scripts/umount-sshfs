@@ -1,2 +1,0 @@
-#!/bin/bash
-umount -l /etc/borgmatic.d/"$1"

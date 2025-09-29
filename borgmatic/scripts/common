@@ -1,0 +1,36 @@
+#!/bin/bash
+
+borg_mount_remote_filesystem() {
+    host=$1
+    sshfs \
+        borg@"$host":/ \
+        "$(borg_remote_filesystem_mount_point "$host")" \
+        -o StrictHostKeyChecking=no \
+        -o sftp_server="/usr/bin/sudo /usr/lib/sftp-server"
+}
+
+borg_umount_remote_filesystem() {
+    host=$1
+    umount -l "$(borg_remote_filesystem_mount_point "$host")"
+}
+
+borg_remote_filesystem_mount_point() {
+    host=$1
+    echo /etc/borgmatic.d/"$host"
+}
+
+borg_backup_postgres_database() {
+    host=$1
+    container=$2
+    ssh "$host" -qt sudo docker exec \
+        "$container" \
+        'bash -c "pg_dump -U \$POSTGRES_USER -d \$POSTGRES_DB -f /docker-entrypoint-initdb.d/restore.sql"'
+}
+
+borg_postgres_backup_clean() {
+    host=$1
+    container=$2
+    ssh "$host" -qt sudo docker exec \
+        "$container" \
+        'rm /docker-entrypoint-initdb.d/restore.sql'
+}

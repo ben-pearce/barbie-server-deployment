@@ -1,4 +1,6 @@
 #!/bin/bash
 
-# shellcheck source=../mount-sshfs
-. "$(realpath "$(dirname "$0")/..")"/mount-sshfs rc
+# shellcheck source=../common
+. "$(dirname "$0")"/../common
+
+borg_mount_remote_filesystem rc

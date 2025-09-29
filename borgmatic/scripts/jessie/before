@@ -1,4 +1,10 @@
 #!/bin/bash
 
-# shellcheck source=../mount-sshfs
-. "$(realpath "$(dirname "$0")/..")"/mount-sshfs jessie
+# shellcheck source=../common
+. "$(dirname "$0")"/../common
+
+borg_mount_remote_filesystem jessie
+borg_backup_postgres_database jessie firefly-postgres
+borg_backup_postgres_database jessie immich-postgres
+borg_backup_postgres_database jessie nextcloud-postgres
+borg_backup_postgres_database jessie paperless-postgres

@@ -1,4 +1,6 @@
 #!/bin/bash
 
-# shellcheck source=../umount-sshfs
-. "$(realpath "$(dirname "$0")/..")"/umount-sshfs zurg
+# shellcheck source=../common
+. "$(dirname "$0")"/../common
+
+borg_umount_remote_filesystem zurg
