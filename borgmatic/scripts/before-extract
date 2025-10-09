@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [[ -n "$SAFE_EXTRACT_PATH" ]]; then
-    if [[ -d "$SAFE_EXTRACT_PATH" ]] && [[ "$(ls -A "$SAFE_EXTRACT_PATH")" ]]; then
-        exit 1
-    fi
-fi

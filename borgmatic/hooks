@@ -1,0 +1,66 @@
+#!/bin/bash
+
+mount () {
+    host=$1
+    sshfs \
+        borg@"$host":/ \
+        "$(mount-point "$host")" \
+        -o StrictHostKeyChecking=no \
+        -o sftp_server="/usr/bin/sudo /usr/lib/sftp-server"
+}
+
+unmount () {
+    host=$1
+    umount -l "$(mount-point "$host")"
+}
+
+mount-point () {
+    host=$1
+    echo /etc/borgmatic.d/"$host"
+}
+
+postgres-containers () {
+    host=$1
+    ssh "$host" -qt docker container ls --filter name=postgres --format "{{.Names}}"
+}
+
+postgres-dump () {
+    host=$1
+    for container in $(postgres-containers "$host"); do
+        ssh "$host" -qt docker exec \
+            "$container" \
+            'bash -c "pg_dump -U \$POSTGRES_USER -d \$POSTGRES_DB -f /docker-entrypoint-initdb.d/restore.sql"'
+    done
+}
+
+postgres-clean () {
+    host=$1
+    container=$2
+    for container in $(postgres-containers "$host"); do
+        ssh "$host" -qt docker exec \
+            "$container" \
+            'rm /docker-entrypoint-initdb.d/restore.sql'
+    done
+}
+
+check-empty () {
+    dir=$SAFE_EXTRACT_PATH
+    if [[ -n "$dir" ]]; then
+        if [[ -d "$dir" ]] && [[ "$(ls -A "$dir")" ]]; then
+            exit 1
+        fi
+    fi
+}
+
+exclude-gitignore-files () {
+    dir=$1
+    out=$2
+    find "$dir" -type f -name ".gitignore" | while read -r gitignore_file; do
+        base_dir=$(dirname "$gitignore_file")
+        grep -vE '^\s*#|^\s*$' "$gitignore_file" | while read -r line; do
+            echo "$base_dir/$line" >> "$out"
+        done
+    done
+}
+
+"$1" "${@:2}"
