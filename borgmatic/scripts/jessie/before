@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# shellcheck source=../mount-sshfs
-. "$(realpath "$(dirname "$0")/..")"/mount-sshfs jessie
