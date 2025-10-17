@@ -10,7 +10,7 @@ services:
     volumes:
       - /root/.ssh:/root/.ssh:ro
       - ${DATA_DIR}/repository:/mnt/repository:shared
-      - ${CONFIG_DIR}/borgmatic/borgmatic.d:/etc/borgmatic.d
+      - ${DATA_DIR}/borgmatic/config:/etc/borgmatic.d
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
       - cloud:/etc/borgmatic.d/barbie/cloud
@@ -41,7 +41,7 @@ services:
     image: rclone/rclone:1.71.1@sha256:d5971950c2b370fb04dd3292541b5bda6d9103143fd7e345aeb435a399388afc
     container_name: rclone
     volumes:
-      - ${CONFIG_DIR}/rclone:/config/rclone
+      - ${DATA_DIR}/rclone:/config/rclone
       - ${DATA_DIR}/repository:/data/repository:shared
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
