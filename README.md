@@ -27,7 +27,6 @@ The `.env` file stores environment variables to make starting the containers eas
 | `TZ` | Timezone for all containers. | `Europe/London` |
 | `PUID` | System user ID to run containers as. | `1000` |
 | `PGID` | System group ID to run containers as. | `1000` |
-| `CONFIG_DIR` | Location of config storage on host. | `config` |
 | `DATA_DIR` | Location of data storage on host. | `data` |
 | `ADMIN_EMAIL` | Administrative email address. | `somebody@example.com` |
 | `ZBX_HOSTNAME` | Zabbix server hostname. | `zabbix-server` |
