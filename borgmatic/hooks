@@ -43,6 +43,22 @@ postgres-clean () {
     done
 }
 
+mailcow-backup () {
+    host=$1
+    mailcow_dir=$2
+    backup_dir=$3
+    ssh "$host" -qt \
+        MAILCOW_BACKUP_LOCATION="$backup_dir" \
+        sudo -E "$mailcow_dir"/helper-scripts/backup_and_restore.sh \
+        backup all
+}
+
+mailcow-clean () {
+    host=$1
+    backup_dir=$2
+    ssh "$host" -qt sudo rm -rf "$backup_dir"/*
+}
+
 check-empty () {
     dir=$SAFE_EXTRACT_PATH
     if [[ -n "$dir" ]]; then
