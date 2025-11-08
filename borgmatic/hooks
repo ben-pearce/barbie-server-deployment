@@ -58,6 +58,38 @@ mailcow-clean () {
     ssh "$host" -qt sudo rm -rf "$backup_dir"/*
 }
 
+discourse-backup () {
+    host=$1
+    container=$2
+    ssh "$host" -qt docker exec \
+        "$container" \
+        discourse backup
+}
+
+discourse-clean () {
+    host=$1
+    container=$2
+    ssh "$host" -qt docker exec \
+        "$container" \
+        "bash -c 'rm -rf /shared/backups/default/*'"
+}
+
+gitlab-backup () {
+    host=$1
+    container=$2
+    ssh "$host" -qt docker exec \
+        "$container" \
+        gitlab-backup create
+}
+
+gitlab-clean () {
+    host=$1
+    container=$2
+    ssh "$host" -qt docker exec \
+        "$container" \
+        "sh -c 'rm -rf /var/opt/gitlab/backups/*'"
+}
+
 check-empty () {
     dir=$SAFE_EXTRACT_PATH
     if [[ -n "$dir" ]]; then
