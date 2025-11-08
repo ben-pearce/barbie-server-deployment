@@ -35,7 +35,6 @@ postgres-dump () {
 
 postgres-clean () {
     host=$1
-    container=$2
     for container in $(postgres-containers "$host"); do
         ssh "$host" -qt docker exec \
             "$container" \
