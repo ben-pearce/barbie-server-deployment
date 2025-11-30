@@ -1,12 +1,18 @@
 #!/bin/bash
 
+ability () {
+    host=$1
+    shift 1
+    ssh "$host" -qt ability "$@"
+}
+
 mount () {
     host=$1
     sshfs \
         borg@"$host":/ \
         "$(mount-point "$host")" \
         -o StrictHostKeyChecking=no \
-        -o sftp_server="/usr/bin/sudo /usr/lib/sftp-server"
+        -o sftp_server="/usr/local/bin/ability mount-filesystem"
 }
 
 unmount () {
@@ -19,83 +25,12 @@ mount-point () {
     echo /etc/borgmatic.d/"$host"
 }
 
-postgres-containers () {
-    host=$1
-    ssh "$host" -qt docker container ls --filter name=postgres --format "{{.Names}}"
-}
-
-postgres-dump () {
-    host=$1
-    for container in $(postgres-containers "$host"); do
-        ssh "$host" -qt docker exec \
-            "$container" \
-            'bash -c "pg_dump -U \$POSTGRES_USER -d \$POSTGRES_DB -f /docker-entrypoint-initdb.d/restore.sql"'
-    done
-}
-
-postgres-clean () {
-    host=$1
-    for container in $(postgres-containers "$host"); do
-        ssh "$host" -qt docker exec \
-            "$container" \
-            'rm /docker-entrypoint-initdb.d/restore.sql'
-    done
-}
-
-mailcow-backup () {
-    host=$1
-    mailcow_dir=$2
-    backup_dir=$3
-    ssh "$host" -qt \
-        MAILCOW_BACKUP_LOCATION="$backup_dir" \
-        sudo -E "$mailcow_dir"/helper-scripts/backup_and_restore.sh \
-        backup all
-}
-
-mailcow-clean () {
-    host=$1
-    backup_dir=$2
-    ssh "$host" -qt sudo rm -rf "$backup_dir"/*
-}
-
-discourse-backup () {
-    host=$1
-    container=$2
-    ssh "$host" -qt docker exec \
-        "$container" \
-        discourse backup
-}
-
-discourse-clean () {
-    host=$1
-    container=$2
-    ssh "$host" -qt docker exec \
-        "$container" \
-        "bash -c 'rm -rf /shared/backups/default/*'"
-}
-
-gitlab-backup () {
-    host=$1
-    container=$2
-    ssh "$host" -qt docker exec \
-        "$container" \
-        gitlab-backup create
-}
-
-gitlab-clean () {
-    host=$1
-    container=$2
-    ssh "$host" -qt docker exec \
-        "$container" \
-        "sh -c 'rm -rf /var/opt/gitlab/backups/*'"
-}
-
 check-empty () {
-    dir=$SAFE_EXTRACT_PATH
-    if [[ -n "$dir" ]]; then
-        if [[ -d "$dir" ]] && [[ "$(ls -A "$dir")" ]]; then
-            exit 1
-        fi
+    dir=$1
+    if [ -n "$(ls -A "$dir" 2>/dev/null)" ]; then
+        exit 75
+    else
+        exit 0
     fi
 }
 
