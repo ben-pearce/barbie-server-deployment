@@ -8,7 +8,6 @@ services:
     depends_on:
       - rclone
     volumes:
-      - /root/.ssh:/root/.ssh:ro
       - ${DATA_DIR}/repository:/mnt/repository:shared
       - ${DATA_DIR}/borgmatic/config:/etc/borgmatic.d
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
@@ -20,6 +19,7 @@ services:
     secrets:
       - smtp_password
       - borg_passphrase
+      - borg_user_private_key
     environment:
       - TZ
       - RUN_ON_STARTUP
@@ -81,3 +81,5 @@ secrets:
     file: ./.secrets/smtp_password
   borg_passphrase:
     file: ./.secrets/borg_passphrase
+  borg_user_private_key:
+    file: ./.secrets/borg_user_private_key

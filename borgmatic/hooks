@@ -3,26 +3,31 @@
 ability () {
     host=$1
     shift 1
-    ssh "$host" -qt ability "$@"
+    connect_host="${HOST_OVERRIDE:-$host}"
+    ssh borg@"$connect_host" \
+        -i /run/secrets/borg_user_private_key \
+        -o StrictHostKeyChecking=no \
+        -qt ability "$@"
 }
 
 mount () {
     host=$1
+    connect_host="${HOST_OVERRIDE:-$host}"
+
+    if [ "$(ls -A "$PWD")" ]; then
+        echo "Error: current directory is not empty"
+        return 1
+    fi
+
     sshfs \
-        borg@"$host":/ \
-        "$(mount-point "$host")" \
+        borg@"$connect_host":/ "$PWD" \
+        -o IdentityFile=/run/secrets/borg_user_private_key \
         -o StrictHostKeyChecking=no \
         -o sftp_server="/usr/local/bin/ability mount-filesystem"
 }
 
 unmount () {
-    host=$1
-    umount -l "$(mount-point "$host")"
-}
-
-mount-point () {
-    host=$1
-    echo /etc/borgmatic.d/"$host"
+    umount -l "$PWD"
 }
 
 check-empty () {
