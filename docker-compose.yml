@@ -42,7 +42,6 @@ services:
     image: rclone/rclone:1.73.3@sha256:66af24d7c8809af336dc16068149257cf447c80f8c60aa9f5679153f42017b85
     container_name: rclone
     volumes:
-      - ${DATA_DIR}/rclone:/config/rclone
       - ${DATA_DIR}/repository:/data/repository:shared
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
@@ -55,6 +54,10 @@ services:
         --vfs-write-wait 30s 
         --vfs-cache-mode full 
         --cache-dir=/tmp/cache
+    secrets:
+      - rclone_config
+    environment:
+      - RCLONE_CONFIG=/run/secrets/rclone_config
     restart: unless-stopped
     labels:
       readme.description: >-
@@ -84,3 +87,5 @@ secrets:
     file: ./.secrets/borg_passphrase
   borg_user_private_key:
     file: ./.secrets/borg_user_private_key
+  rclone_config:
+    file: ./.secrets/rclone_config
