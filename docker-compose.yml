@@ -46,6 +46,10 @@ services:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
+    secrets:
+      - rclone_config
+    environment:
+      - RCLONE_CONFIG=/run/secrets/rclone_config
     command: >-
       mount blaze:borgmatic /data/repository 
         --allow-non-empty 
@@ -54,10 +58,6 @@ services:
         --vfs-write-wait 30s 
         --vfs-cache-mode full 
         --cache-dir=/tmp/cache
-    secrets:
-      - rclone_config
-    environment:
-      - RCLONE_CONFIG=/run/secrets/rclone_config
     restart: unless-stopped
     labels:
       readme.description: >-
