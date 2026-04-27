@@ -42,7 +42,7 @@ services:
     image: rclone/rclone:1.73.5@sha256:1619a625f845e169c34b952cf40c483c0392965b821c5155cde8cbfd35254a96
     container_name: rclone
     volumes:
-      - ${DATA_DIR}/repository:/data/repository:shared
+      - ${DATA_DIR}/repository:/mnt/repository:shared
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - /etc/fuse.conf:/etc/fuse.conf:ro
@@ -51,7 +51,7 @@ services:
     environment:
       - RCLONE_CONFIG=/run/secrets/rclone_config
     command: >-
-      mount blaze:borgmatic /data/repository 
+      mount blaze:borgmatic /mnt/repository 
         --allow-non-empty 
         --vfs-cache-max-size 10G 
         --vfs-write-back 10s 
