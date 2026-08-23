@@ -1,53 +1,148 @@
 #!/bin/bash
 
+set -u
+
+readonly KEY_FILE=/run/secrets/borg_user_private_key
+
+# Print the command overview; shown for help, no args, or bad commands.
+usage () {
+    cat <<'EOF'
+Usage: hooks <command> [arguments]
+
+Commands:
+  ability <host> [args...]
+      Invoke the restricted "ability" command on a borg host.
+
+  mount <host> <path>
+      Mount <path> from a borg host over sshfs into the current
+      (empty) directory.
+
+  unmount
+      Unmount the sshfs mount from the current directory.
+
+  check-empty <dir>
+      Exit 0 if <dir> is empty, 75 otherwise.
+
+  exclude-patterns <glob>... <output-file>
+      Concatenate all files matching the globs into <output-file>.
+
+Environment:
+  HOST_OVERRIDE   Connect to this host instead of the one supplied.
+
+Run 'hooks help' to see this message.
+EOF
+}
+
+# Print an error to stderr and exit with status 1.
+die () {
+    echo "Error: $*" >&2
+    exit 1
+}
+
+# Die with <message> unless exactly <count> arguments were supplied.
+require_args () {
+    local expected=$1 msg=$2
+    shift 2
+    [ $# -eq "$expected" ] || die "$msg"
+}
+
+# Run the restricted "ability" command on a remote borg host over ssh.
+# HOST_OVERRIDE replaces the given host when set.
 ability () {
-    host=$1
-    shift 1
+    [ $# -ge 1 ] || die "usage: hooks ability <host> [args...]"
+    local host=$1 connect_host
+    shift
     connect_host="${HOST_OVERRIDE:-$host}"
     ssh borg@"$connect_host" \
-        -i /run/secrets/borg_user_private_key \
+        -i "$KEY_FILE" \
+        -o BatchMode=yes \
         -o StrictHostKeyChecking=no \
         -qt ability "$@"
 }
 
+# sshfs-mount a remote borg path into the current directory, which must
+# be empty. The server-side sftp server is forced to "ability
+# mount-filesystem".
 mount () {
-    host=$1
+    require_args 2 "usage: hooks mount <host> <path>" "$@"
+    local host=$1 path=$2 connect_host
     connect_host="${HOST_OVERRIDE:-$host}"
 
-    if [ "$(ls -A "$PWD")" ]; then
-        echo "Error: current directory is not empty"
-        return 1
+    if [ -n "$(ls -A "$PWD")" ]; then
+        die "current directory is not empty"
     fi
 
     sshfs \
-        borg@"$connect_host":/ "$PWD" \
-        -o IdentityFile=/run/secrets/borg_user_private_key \
+        "borg@$connect_host:$path" "$PWD" \
+        -o IdentityFile="$KEY_FILE" \
         -o StrictHostKeyChecking=no \
-        -o sftp_server="/usr/local/bin/ability mount-filesystem"
+        -o sftp_server="/usr/lib/sftp-server"
 }
 
+# Lazily unmount whatever is mounted at the current directory.
 unmount () {
-    umount -l "$PWD"
+    umount -l -- "$PWD"
 }
 
+# Exit 0 if the given directory is empty, exit 75 if it contains
+# anything (75 is borgmatic's "check failed" convention).
 check-empty () {
-    dir=$1
-    if [ -n "$(ls -A "$dir" 2>/dev/null)" ]; then
+    require_args 1 "usage: hooks check-empty <dir>" "$@"
+    local dir=$1
+    if [ -n "$(ls -A -- "$dir" 2>/dev/null)" ]; then
         exit 75
-    else
-        exit 0
     fi
+    exit 0
 }
 
-exclude-gitignore-files () {
-    dir=$1
-    out=$2
-    find "$dir" -type f -name ".gitignore" | while read -r gitignore_file; do
-        base_dir=$(dirname "$gitignore_file")
-        grep -vE '^\s*#|^\s*$' "$gitignore_file" | while read -r line; do
-            echo "$base_dir/$line" >> "$out"
-        done
+# Concatenate pattern files into the last argument: find files matching
+# the leading globs, then copy their non-comment, non-blank lines,
+# prefixed with each file's directory.
+exclude-patterns () {
+    [ $# -ge 2 ] || die "usage: hooks exclude-patterns <glob>... <output-file>"
+    local out="${*: -1}" base_dir line
+    set -- "${@:1:$#-1}"
+
+    local name_args=()
+    for pattern in "$@"; do
+        name_args+=(-name "$pattern" -o)
     done
+    unset 'name_args[${#name_args[@]}-1]'
+
+    : > "$out"
+    find . -type f \( "${name_args[@]}" \) -print0 |
+    while IFS= read -r -d '' pattern_file; do
+        base_dir=$(dirname "$pattern_file")
+        grep -vE '^[[:space:]]*#|^[[:space:]]*$' "$pattern_file" |
+        while IFS= read -r line; do
+            printf '%s/%s\n' "$base_dir" "$line"
+        done
+    done >> "$out"
 }
 
-"$1" "${@:2}"
+# Dispatch to the named subcommand; show usage for help or bad input.
+main () {
+    if [ $# -eq 0 ]; then
+        usage
+        exit 1
+    fi
+
+    local subcmd=$1
+    shift
+
+    case $subcmd in
+        help|-h|--help)
+            usage
+            ;;
+        ability|mount|unmount|check-empty|exclude-patterns)
+            "$subcmd" "$@"
+            ;;
+        *)
+            echo "Error: unknown command '$subcmd'" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
