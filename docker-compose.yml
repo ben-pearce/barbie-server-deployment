@@ -14,8 +14,8 @@ services:
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
       - ${DATA_DIR}/borgmatic/state:/root/.local/state/borgmatic
-      - cloud:/etc/borgmatic.d/barbie/cloud
-      - workspaces:/etc/borgmatic.d/barbie/workspaces
+      - cloud:/mnt/sources/barbie/cloud
+      - workspaces:/mnt/sources/barbie/workspaces
       - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
       - ./borgmatic/hooks:/usr/local/bin/hooks:ro
       - ./borgmatic/borgmatic:/usr/local/bin/borgmatic:ro
