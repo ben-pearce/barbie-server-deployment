@@ -10,8 +10,10 @@ services:
     volumes:
       - ${DATA_DIR}/repository:/mnt/repository:shared
       - ${DATA_DIR}/borgmatic/config:/etc/borgmatic.d
+      - ${DATA_DIR}/borgmatic/sources:/mnt/sources
       - ${DATA_DIR}/borgmatic/cache:/root/.cache/borg
       - ${DATA_DIR}/borgmatic/borg:/root/.config/borg
+      - ${DATA_DIR}/borgmatic/state:/root/.local/state/borgmatic
       - cloud:/etc/borgmatic.d/barbie/cloud
       - workspaces:/etc/borgmatic.d/barbie/workspaces
       - ./borgmatic/crontab.txt:/etc/borgmatic.d/crontab.txt:ro
