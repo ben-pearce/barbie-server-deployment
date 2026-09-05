@@ -24,12 +24,12 @@ services:
       - borg_passphrase
       - borg_user_private_key
     environment:
-      - TZ
-      - RUN_ON_STARTUP
-      - ADMIN_EMAIL
-      - SMTP_HOST
-      - SMTP_USER
-      - FILE__SMTP_PASSWORD=/run/secrets/smtp_password
+      TZ: ${TZ}
+      RUN_ON_STARTUP: ${RUN_ON_STARTUP}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_USER: ${SMTP_USER}
+      FILE__SMTP_PASSWORD: /run/secrets/smtp_password
     restart: unless-stopped
     labels:
       readme.description: Simple, configuration-driven backup software.
@@ -51,7 +51,7 @@ services:
     secrets:
       - rclone_config
     environment:
-      - RCLONE_CONFIG=/run/secrets/rclone_config
+      RCLONE_CONFIG: /run/secrets/rclone_config
     command: >-
       mount blaze:borgmatic /mnt/repository 
         --allow-non-empty 
