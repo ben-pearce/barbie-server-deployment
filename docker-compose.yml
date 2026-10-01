@@ -25,7 +25,6 @@ services:
       - borg_user_private_key
     environment:
       TZ: ${TZ}
-      RUN_ON_STARTUP: ${RUN_ON_STARTUP}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       SMTP_HOST: ${SMTP_HOST}
       SMTP_USER: ${SMTP_USER}
