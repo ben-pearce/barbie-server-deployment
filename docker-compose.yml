@@ -3,7 +3,7 @@ include:
   - stacks/docker-compose.monitoring.yml
 services:
   borgmatic:
-    image: ghcr.io/borgmatic-collective/borgmatic:2.1.9@sha256:09e416d967ee7026baba83a1a7276572ec98d13057218e506b3c6de94c547027
+    image: ghcr.io/borgmatic-collective/borgmatic:2.1.10@sha256:25a97d84a2371c385c0031a02b64f7167de85631a85b84ef46dc01a80010d19e
     container_name: borgmatic
     depends_on:
       - rclone
